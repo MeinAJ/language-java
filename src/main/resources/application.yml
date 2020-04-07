@@ -1,0 +1,98 @@
+# Tomcat
+server:
+	tomcat:
+		uri-encoding: UTF-8
+		max-threads: 1000
+		min-spare-threads: 30
+	port: 8888
+	servlet:
+		context-path: /
+
+spring:
+	main:
+		allow-bean-definition-overriding: true
+	application:
+		name: springboot
+	jackson:
+		date-format: yyyy-MM-dd HH:mm:ss
+		time-zone: GMT+8
+	servlet:
+		multipart:
+			max-file-size: 100MB
+			max-request-size: 100MB
+			enabled: true
+	freemarker:
+		suffix: .html
+		request-context-attribute: request
+	redis:
+		host: ${redis.host}
+		port: ${redis.port}
+		password: ${redis.password}
+		database: ${redis.database}
+		jedis:
+			pool:
+				max-active: 32
+				max-wait: 6000ms
+				max-idle: 64
+				min-idle: 4
+	datasource:
+		type: com.alibaba.druid.pool.DruidDataSource
+		driverClassName: org.postgresql.Driver
+		druid:
+			url: jdbc:postgresql://${db.host}:${db.port}/${db.database}?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+			username: ${db.username}
+			password: ${db.password}
+			initial-size: 10
+			max-active: 100
+			min-idle: 10
+			max-wait: 60000
+			pool-prepared-statements: true
+			max-pool-prepared-statement-per-connection-size: 20
+			time-between-eviction-runs-millis: 60000
+			min-evictable-idle-time-millis: 300000
+			validation-query: SELECT 1
+			test-while-idle: true
+			test-on-borrow: false
+			test-on-return: false
+			stat-view-servlet:
+				enabled: true
+				url-pattern: /druid/*
+				#login-username: admin
+				#login-password: admin
+			filter:
+				stat:
+					log-slow-sql: true
+					slow-sql-millis: 1000
+					merge-sql: false
+				wall:
+					config:
+						multi-statement-allow: true
+	mvc:
+		throw-exception-if-no-handler-found: true
+
+auth:
+	include-url:
+		- /api/**
+	exclude-url:
+		- /swagger-ui.html
+		- /api/v1/user/login
+#mybatis
+mybatis-plus:
+	# 扫描 mapper.xml
+	mapper-locations: classpath:mappers/*.xml
+	type-handlers-package: com.dataofx.base.handler, com.dataofx.lot.common.handler
+	global-config:
+		db-config:
+			id-type: AUTO
+			logic-not-delete-value: 0
+			logic-delete-value: 1
+log:
+	name: springboot
+	level: info
+	file:
+		max-size: 100MB
+		total-size-cap: 10GB
+		max-history: 180
+
+swagger:
+	enable: false
